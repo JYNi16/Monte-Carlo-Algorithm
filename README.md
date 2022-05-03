@@ -8,4 +8,6 @@ This Project include Monte-Carlo simulation for varies complex physics system:
 
 (3) 2D XXZ model 
 
+(4) Heisenberg model
+
 The programing langurages of this project are C++ and Python 
