@@ -10,7 +10,7 @@ using namespace std;
 
 utils UTILS; 
 
-const int L = 40, B = 1, sweeps=100000, relax = 100; //L is lattice size and B is Boltzmann constant;  
+const int L = 40, B = 1, sweeps=10000, relax = 100; //L is lattice size and B is Boltzmann constant;  
 int M = 0, S = L*L; 
 using Matrix = std::array<std::array<int, L>, L>;
 
@@ -30,8 +30,8 @@ Matrix InialSpin() {
 int main()
 {
     ofstream mfile;
-    mfile.open("F:\\C++\\Monte-Carlo\\data\\m1.dat");
-    for (float T=0.1; T<5.0; T+=0.05)
+    mfile.open("E:\\MonteCarlo\\2D-Ising-Model\\C++\\m1.dat");
+    for (float T=0.5; T<4.0; T+=0.1)
     {
         //Inilazing the spin lattice SpinM 
         double Mag[sweeps+relax]; 
