@@ -10,7 +10,7 @@ from multiprocessing import Pool
 from numba import jit 
 import time
 
-sweeps = 2000
+sweeps = 10000
 K = 1
 J = 1
 H = 0
@@ -18,7 +18,7 @@ Lattice = 40
 relax = 100
 
 @jit
-def metrics_loop(spin, t):
+def metropolis(spin, t):
     mag = [] 
     mag_2 = []
     for k in range(sweeps + relax):
@@ -52,7 +52,7 @@ def main_loop(T):
     t = T/10 
     spin = np.ones([Lattice, Lattice], dtype = int)
     
-    mag, mag_2 = metrics_loop(spin, t)
+    mag, mag_2 = metropolis(spin, t)
     
             
     result = np.sum(mag[relax:]) / sweeps
