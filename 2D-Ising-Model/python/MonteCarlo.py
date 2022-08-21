@@ -4,6 +4,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from multiprocessing import Pool 
+from numba import jit 
+
+import time
 
 class MonteCarlo():
     
@@ -27,6 +30,7 @@ class MonteCarlo():
         
         return delta_E 
     
+    #@jit
     def main_loop(self, T):
         
         S = self.Lattice ** 2
@@ -52,18 +56,20 @@ class MonteCarlo():
                         if np.exp((-delta_E)/t) > np.random.random():
                             spin[i,j] = - spin[i,j]
                                 
-            M = abs(sum(sum(spin))) / S   
-            M_2 = M ** 2 
+            M = np.abs(np.mean(spin))
+            M_2 = np.square(M)
             mag_2.append(M_2)
             mag.append(M)
             
         result = sum(mag[self.relax:]) / self.sweeps
         test = [] 
-        test.append(t)
-        test.append(result)
+
         #print("result is:", spin)
         result_2 = sum(mag_2[self.relax:]) / self.sweeps 
         result_C = (result_2 - result ** 2) / T # 求磁比热
+        test.append(t)
+        test.append(result)
+        test.append(result_C)
         
         np.save("M_T/{:d}.npy".format(T), test)
              
@@ -74,16 +80,27 @@ class MonteCarlo():
         #f_C.close()
     def multi_run(self):
         
+        start = time.time()
+        
         ing_argv = [] 
-        for T in range(3, 30, 1):
+        for T in range(8, 40, 1):
             ing_argv.append(T)
         
-        p = Pool(8)
-        p.map(self.main_loop, ing_argv)
+        with Pool(16) as p:
+            p.map(self.main_loop, ing_argv)
         
+        end = time.time() 
+        
+        print("run time is:", (end - start))
     
-    
+    def single_run(self):
+        start = time.time()
+        for T in range(3, 30, 1):
+            self.main_loop(T)
+        
+        end = time.time() 
+        print("run time is:", (end - start))
 
 if __name__=="__main__":
     MC_model = MonteCarlo(100, 5000, 1, 1, 0, 10)
-    MC_model.multi_run()
+    MC_model.single_run()
