@@ -24,16 +24,21 @@ def metropolis(spin, t):
     for k in range(sweeps + relax):
         for i in range(Lattice):
             for j in range(Lattice):
-                top = (i - 1) % Lattice
-                bottom = (i + 1) % Lattice
-                left = (j - 1) % Lattice
-                right = (j + 1) % Lattice
-                delta_E = 2.0 * spin[i,j] * (J * (spin[top,j] + spin[bottom,j] + spin[i,left] + spin[i,right]) +  H )
+                tmp = []
+                for kk in range(8):
+                    tmp.append(np.random.randint(0, Lattice))
+                x_site = tmp[1]
+                y_site = tmp[4]
+                top = (x_site - 1) % Lattice
+                bottom = (x_site + 1) % Lattice
+                left = (y_site - 1) % Lattice
+                right = (y_site + 1) % Lattice
+                delta_E = 2.0 * spin[x_site,y_site] * (J * (spin[top,y_site] + spin[bottom,y_site] + spin[x_site,left] + spin[x_site,right]) +  H )
                 if delta_E <= 0:
-                    spin[i,j] = -spin[i,j]
+                    spin[x_site,y_site] = -spin[x_site,y_site]
                 else:
                     if np.exp((-delta_E)/t) > np.random.random():
-                        spin[i,j] = -spin[i,j]
+                        spin[x_site,y_site] = -spin[x_site,y_site]
                 #spin[i,j] = 1
         
         M = np.abs(np.mean(spin))
