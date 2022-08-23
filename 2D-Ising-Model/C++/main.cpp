@@ -10,7 +10,7 @@ using namespace std;
 
 utils UTILS; 
 
-const int L = 40, B = 1, sweeps=10000, relax = 100; //L is lattice size and B is Boltzmann constant;  
+const int L = 40, B = 1, sweeps=50000, relax = 5000; //L is lattice size and B is Boltzmann constant;  
 int M = 0, S = L*L; 
 using Matrix = std::array<std::array<int, L>, L>;
 
@@ -39,20 +39,26 @@ int main()
         Matrix SpinM = InialSpin(); 
         for(int k=0; k<sweeps+relax; k++)
         {
-            for(int i=0; i<L; i++)
+            for(int i=0; i<(L*L); i++)
             {
-                for(int j=0; j<L; j++)
-                { 
-                    int top = SpinM[UTILS.Neigh1(i)][j];
-                    int bottom = SpinM[UTILS.Neigh2(i)][j];
-                    int left = SpinM[i][UTILS.Neigh1(j)];
-                    int right = SpinM[i][UTILS.Neigh2(j)];
-                    int delta_E = UTILS.funcdeltaE(SpinM[i][j], top, bottom, left, right); 
-                    if (delta_E <= 0) SpinM[i][j] = -SpinM[i][j]; 
-                    else if (delta_E > 0)
-                    {
-                        if (exp(-delta_E/T) > UTILS.random()) SpinM[i][j] = -SpinM[i][j];
-                    }
+                int tmp[8]; 
+                for (int ww=0; ww<8; ww++)
+                {
+                    tmp[ww] = UTILS.randint(L);
+                    //cout << UTILS.randint(L) << endl; 
+                }
+                int x_site = tmp[1];
+                int y_site = tmp[4];
+                //cout << x_site << endl;
+                int top = SpinM[UTILS.Neigh1(x_site)][y_site];
+                int bottom = SpinM[UTILS.Neigh2(x_site)][y_site];
+                int left = SpinM[x_site][UTILS.Neigh1(y_site)];
+                int right = SpinM[x_site][UTILS.Neigh2(y_site)];
+                int delta_E = UTILS.funcdeltaE(SpinM[x_site][y_site], top, bottom, left, right); 
+                if (delta_E <= 0) SpinM[x_site][y_site] = -SpinM[x_site][y_site]; 
+                else if (delta_E > 0)
+                {
+                    if (exp(-delta_E/T) > UTILS.random()) SpinM[x_site][y_site] = -SpinM[x_site][y_site];
                 }
             }
             int M = 0; 
