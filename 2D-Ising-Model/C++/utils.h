@@ -25,6 +25,11 @@ public:
        {
            return rand()%(N+1)/(float)(N+1);
        }
+       
+       int randint(int Lattice)
+       {
+           return (rand()%(Lattice));
+       }
        int Neigh1(int& Minus)
        {
            if ((Minus-1)%l == l-1 || (Minus-1)%l == -1) return (Minus-1+l);
