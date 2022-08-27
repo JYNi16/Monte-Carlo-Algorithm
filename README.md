@@ -1,6 +1,6 @@
 # Monte-Carlo-Algorithm
 
-This Project include Monte-Carlo simulation for varies complex physics system:
+This Project include Monte-Carlo simulation for various physics systems:
 
 (1) 2D-Ising model 
 
@@ -9,5 +9,9 @@ This Project include Monte-Carlo simulation for varies complex physics system:
 (3) 2D XXZ model 
 
 (4) Heisenberg model
+
+In addition, different algorithms are implemented, including:
+
+(1) metropolics (single-flip method) (2) Wolff clusiter method 
 
 Above simulation coded by C++ and Python 
