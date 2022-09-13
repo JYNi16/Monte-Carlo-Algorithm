@@ -14,4 +14,4 @@ In addition, different algorithms are implemented, including:
 
 (1) metropolics (single-flip method) (2) Wolff clusiter method 
 
-Above simulation coded by C++ and Python 
+Above simulation coded by fortran and Python 
