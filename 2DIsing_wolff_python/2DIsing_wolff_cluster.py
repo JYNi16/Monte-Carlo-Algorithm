@@ -101,7 +101,7 @@ def main_loop(T):
     test = []
 
     # print("result is:", spin)
-    result_2 = np.sum(mag_2[relax:]) / sweeps
+    result_2 = np.mean(mag_2)
     result_C = (result_2 - result ** 2) / T  # 求磁比热
     test.append(t)
     test.append(result)
