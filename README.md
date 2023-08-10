@@ -12,6 +12,6 @@ This Project include Monte-Carlo simulation for various spin models:
 
 In addition, different algorithms are implemented, including:
 
-(1) metropolics (single-flip method) (2) Wolff clusiter method 
+(1) metropolics (single-flip method) (2) Wolff cluster method 
 
 Above simulation coded by fortran, python and C++ 
