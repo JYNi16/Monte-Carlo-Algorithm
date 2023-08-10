@@ -1,6 +1,6 @@
 # Monte-Carlo-Algorithm
 
-This Project include Monte-Carlo simulation for various physics systems:
+This Project include Monte-Carlo simulation for various spin models:
 
 (1) 2D-Ising model 
 
