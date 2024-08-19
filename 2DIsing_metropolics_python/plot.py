@@ -4,22 +4,30 @@ import math
 from scipy.optimize import curve_fit
 import os, glob 
 
-def load_mpy(root):
+
+def load_npy(root):
+
+    path = []
     
-    path_list = []
-    path_list.extend(glob.glob(os.path.join(root, "*.npy")))
+    #for i in range(len(H)):
+    path.append(os.path.join(root + "/M_T", "M_T.txt"))
+
+    print("path is:", path)
+    M = []
+    T = []
+
+    for i in range(len(path)):
+        M_h, T_h = [], []
+        data = np.loadtxt(path[i])
+        for i in range(len(data)):
+            T_h.append(data[i][0])
+            M_h.append(data[i][1])
+        M.append(M_h)
+        T.append(T_h)
     
-    M, T, C = [], [], []
-    path_list.sort(key=len)
+    print("M is:", M)
     
-    for i in range(len(path_list)):
-        data = np.load(path_list[i])
-        print(data)
-        M.append(data[1])
-        T.append(data[0])
-        C.append(data[2])
-    
-    return T, M, C
+    return T, M
 
 def load_dat(data_path): 
     
@@ -29,24 +37,23 @@ def load_dat(data_path):
         tmp = line.split( )
         T.append(float(tmp[0]))
         M.append(float(tmp[1]))
-        C.append(float(tmp[2]))
     
-    return T, M, C
+    return T, M
     
 
-def plot(T, M, C):
-    plt.figure(figsize = (16,5))
-    p1 = plt.subplot(121)
-    plt.plot(T,M,'o-', color = "#FF0000", markersize = 8, linewidth =1, label = r'$M$')
-    p1 = plt.subplot(122)
-    p1.plot(T,C,'o-', color = "#000000", markersize = 8, linewidth =1, label = r'$M$')
-    #plt.show()
-    plt.savefig("test.jpg", dpi=500)
-
+def plot(T, M):
+    
+    for i in range(len(T)): 
+        plt.plot(T[i],M[i],"o-")
+    
+    #plt.legend(loc="upper right", prop = {'family': "Times New Roman", "weight":"normal", "size":16,}, frameon=False)
+    
+    plt.show()
 
 if __name__=="__main__":
-    T,M,C = load_dat("E:/MonteCarlo/2D-Ising-Model/C++/m1.dat")
-    plot(T, M, C)
+    path = "D:/Monte-Carlo-Algorithm-master/Monte-Carlo-Algorithm-master/2DIsing_metropolics_python"
+    T, M = load_npy(path)
+    plot(T, M)
     
         
     

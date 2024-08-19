@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from multiprocessing import Pool 
 from numba import jit 
 import time
+import os
 
 sweeps = 10000
 K = 1
@@ -48,52 +49,72 @@ def metropolis(spin, t):
         mag.append(M)
     
     return mag, mag_2
-       
-       
+
         
 
 def main_loop(T):
     
-    t = T/10 
+    t = T
     spin = np.ones([Lattice, Lattice], dtype = int)
     
     mag, mag_2 = metropolis(spin, t)
     
-            
-    result = np.sum(mag[relax:]) / sweeps
-    print("result is:", result)
-    test = [] 
-
-        #print("result is:", spin)
-    result_2 = np.sum(mag_2[relax:]) / sweeps 
-    result_C = (result_2 - result ** 2) / T # 求磁比热
-    test.append(t)
-    test.append(result)
-    test.append(result_C)
-        
-    np.save("M_T/{:d}.npy".format(T), test)
-
+    M_ave = np.mean(mag)
+    print("t is", t, "M_ave is:", M_ave)
     
+    
+    # print("result is:", spin)
+    M_2 = np.mean(mag_2)
+    C_v = (M_2 - M_ave ** 2) / T  # 求磁比热
+    
+    return M_2
+    
+def save_data(data):
+    save_path = "M_T"
+    if os.path.exists(save_path):
+        print("save path {} exist".format(save_path))
+    else:
+        print("save path {} not exist".format(save_path))
+        os.makedirs(save_path)
+        print("now makefir the save_path")
+
+    np.savetxt(save_path + "/M_T.txt", data)
+
+
+
 def single_run():
-    start = time.time()
-    for T in range(3, 30, 1):
-        main_loop(T)
+    T = [round(t,2) for t in np.linspace(0.8, 4, 33)]
+    M = []
+    for i in range(len(T)):
+        M.append(main_loop(T[i]))
         
-    end = time.time() 
-    print("run time is:", (end - start))
+    data = [] 
+    print("M is:", M)
+    for i in range(len(T)):
+        data.append([T[i], M[i]])
+        
+    save_data(data)
+
 
 def multi_run():
     start = time.time()
         
+    M = []
     ing_argv = [] 
-    for T in range(8, 40, 1):
-        ing_argv.append(T)
-    with Pool(16) as p:
-        p.map(main_loop, ing_argv)
+    T = [round(t,2) for t in np.linspace(0.8, 4, 33)]
+    for i in range(len(T)):
+        ing_argv.append(T[i])
         
-    end = time.time() 
+    with Pool(8) as p:
+        M.append(p.map(main_loop, ing_argv))
         
-    print("run time is:", (end - start))
+    print(M[0])
+        
+    data = [] 
+    for i in range(len(T)):
+        data.append([T[i], M[0][i]])
+        
+    save_data(data)
 
 if __name__=="__main__":
     single_run()
