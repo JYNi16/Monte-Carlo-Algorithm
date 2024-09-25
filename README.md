@@ -14,4 +14,4 @@ In addition, different algorithms are implemented, including:
 
 (1) metropolics (single-flip method) (2) Wolff cluster method 
 
-Above simulation coded by fortran, python and C++ 
+Above simulation coded by fortran, python and C++, respectively.  
